@@ -54,7 +54,7 @@
     <ul class="card-list" role="list" style="margin-bottom: var(--space-10);">
       {{ range $upcoming }}
         <li>
-          <article class="event-card">
+          <article class="event-card" id="event-{{ ._id }}">
 
             {{/* Date block — visual calendar treatment */}}
             <div class="event-card__date" aria-hidden="true">
@@ -114,7 +114,7 @@
       </summary>
       <div class="minutes-year__body">
         {{ range $past | collections.Reverse }}
-          <div class="meeting-row">
+          <div class="meeting-row" id="event-{{ ._id }}">
             <span class="meeting-row__date">
               <time datetime="{{ .date | time.Format "2006-01-02" }}">
                 {{ .date | time.Format "2 Jan 2006" }}
@@ -130,4 +130,47 @@
     </details>
   {{ end }}
 
+  {{/* Calendar — a second view of the same one-off events, browsable by month */}}
+  <section class="calendar-section" aria-labelledby="calendar-heading" style="margin-top: var(--space-10);">
+    <h2 id="calendar-heading">Calendar</h2>
+
+    <div class="calendar" id="calendar">
+      <div class="calendar__header">
+        <button type="button" class="calendar__nav" id="calendar-prev" aria-label="Previous month">‹</button>
+        <p class="calendar__month" id="calendar-month-label" aria-live="polite"></p>
+        <button type="button" class="calendar__nav" id="calendar-next" aria-label="Next month">›</button>
+        <button type="button" class="calendar__today" id="calendar-today">Today</button>
+      </div>
+
+      <table class="calendar__grid">
+        <caption class="sr-only" id="calendar-caption"></caption>
+        <thead>
+          <tr>
+            <th scope="col"><abbr title="Monday">Mon</abbr></th>
+            <th scope="col"><abbr title="Tuesday">Tue</abbr></th>
+            <th scope="col"><abbr title="Wednesday">Wed</abbr></th>
+            <th scope="col"><abbr title="Thursday">Thu</abbr></th>
+            <th scope="col"><abbr title="Friday">Fri</abbr></th>
+            <th scope="col"><abbr title="Saturday">Sat</abbr></th>
+            <th scope="col"><abbr title="Sunday">Sun</abbr></th>
+          </tr>
+        </thead>
+        <tbody id="calendar-body"></tbody>
+      </table>
+
+      <div class="calendar__day-events" id="calendar-day-events" aria-live="polite"></div>
+    </div>
+
+    {{ $calendarEvents := slice }}
+    {{ range $data.events }}
+      {{ $calendarEvents = $calendarEvents | append (dict "id" ._id "title" .title "date" .date) }}
+    {{ end }}
+    <script type="application/json" id="calendar-events-data">{{ $calendarEvents | jsonify | safeJS }}</script>
+  </section>
+
+{{ end }}
+
+{{ define "scripts" }}
+  {{ $js := resources.Get "js/calendar.js" | minify }}
+  <script src="{{ $js.RelPermalink }}"></script>
 {{ end }}

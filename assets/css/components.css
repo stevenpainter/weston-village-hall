@@ -541,3 +541,184 @@ tr:nth-child(even) td { background: var(--color-parchment); }
   font-size: var(--text-sm);
   color: var(--color-text-muted);
 }
+
+/* ── Events calendar ── */
+
+.calendar {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  padding: var(--space-6);
+}
+
+.calendar__header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.calendar__month {
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--color-green-deep);
+  margin: 0;
+  min-width: 12ch;
+  text-align: center;
+}
+
+.calendar__nav {
+  font-family: var(--font-ui);
+  background: var(--color-green-deep);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-sm);
+  width: 2.25rem;
+  height: 2.25rem;
+  font-size: var(--text-lg);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.calendar__nav:hover {
+  background: var(--color-green-mid);
+}
+
+.calendar__today {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+  color: var(--color-green-deep);
+}
+
+.calendar__today:hover {
+  background: var(--color-green-light);
+}
+
+.calendar__grid {
+  width: 100%;
+  min-width: 0;
+  border-collapse: collapse;
+}
+
+.calendar__grid th {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: var(--space-2);
+  text-align: center;
+}
+
+.calendar__grid th abbr {
+  text-decoration: none;
+}
+
+/* Override the site-wide table th/td/striping rules (designed for data
+   tables like the hire-rates table) — the calendar grid needs its own
+   plain, borderless layout */
+.calendar__grid th {
+  background: transparent;
+}
+
+.calendar__grid td {
+  border-bottom: none;
+}
+
+.calendar__grid tr:nth-child(even) td {
+  background: transparent;
+}
+
+.calendar__cell {
+  padding: var(--space-1);
+  text-align: center;
+}
+
+.calendar__day {
+  width: 100%;
+  aspect-ratio: 1;
+  min-height: 2.5rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendar__day:hover {
+  background: var(--color-green-light);
+}
+
+.calendar__day[aria-current='date'] {
+  border-color: var(--color-green-deep);
+  font-weight: 700;
+}
+
+.calendar__day.is-selected {
+  background: var(--color-green-deep);
+  color: var(--color-white);
+}
+
+.calendar__day--has-events:not(.is-selected) {
+  font-weight: 700;
+  color: var(--color-green-deep);
+}
+
+.calendar__dot {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-amber);
+}
+
+.calendar__day.is-selected .calendar__dot {
+  background: var(--color-white);
+}
+
+.calendar__day-events {
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-border);
+}
+
+.calendar__day-events-heading {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  color: var(--color-green-deep);
+  margin-top: 0;
+  margin-bottom: var(--space-2);
+}
+
+.calendar__day-events-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.calendar__day-events-list a {
+  color: var(--color-green-deep);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
