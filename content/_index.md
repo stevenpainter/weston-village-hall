@@ -1,9 +1,9 @@
 ---
-title: Welcome to Weston Parish Council
+title: Weston Village Hall
 ---
 
-Welcome to the website for Weston Parish Council, serving the village of Weston in Nottinghamshire.
+At the heart of our community, Weston Village Hall offers a charming historic setting for gatherings of up to 60 guests. With excellent facilities and affordable hire rates, it's the perfect place to bring people together.
 
-Here you'll find information about your parish council, village hall events, meeting minutes and agendas, and local news and notices.
+Whether it's a children's party, a coffee morning, a fitness class, or a local club, the hall provides a warm and adaptable setting for all occasions.
 
-Parish council meetings are open to all residents. We welcome your participation.
+[Find out about our facilities](/facilities/) or [get in touch to make a booking](/contact/).

@@ -13,44 +13,13 @@ show_preview_links: true
 collections:
 
   # ══════════════════════════════════════════════════════════════
-  # COLLECTIONS — editors can create, edit, and delete entries
+  # EVENTS — editors can create, edit, and delete individual events
   # ══════════════════════════════════════════════════════════════
 
-  - name: news
-    label: News
-    label_singular: News article
-    folder: content/news
-    create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-    summary: "{{title}} — {{date}}"
-    fields:
-      - { label: Title,          name: title,     widget: string }
-      - { label: Date,           name: date,      widget: datetime }
-      - { label: Summary,        name: summary,   widget: text,     required: false,
-          hint: "Short description shown in news listings. Keep to 2–3 sentences." }
-      - { label: Body,           name: body,      widget: markdown }
-      - { label: Image,          name: image,     widget: image,    required: false }
-      - { label: Image alt text, name: image_alt, widget: string,   required: false,
-          hint: "Describe the image for people who cannot see it. Leave blank only if the image is purely decorative." }
-
-  - name: notices
-    label: Notices
-    label_singular: Notice
-    folder: content/notices
-    create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-    summary: "{{title}} — {{date}}"
-    fields:
-      - { label: Title,      name: title,      widget: string }
-      - { label: Date,       name: date,       widget: datetime }
-      - { label: Body,       name: body,       widget: markdown }
-      - { label: Attachment, name: attachment, widget: file,     required: false,
-          hint: "Upload a PDF if needed. The file will appear as a download link." }
-
-  - name: village_hall_events
-    label: Village Hall Events
+  - name: events
+    label: Events
     label_singular: Event
-    folder: content/village-hall/events
+    folder: content/events
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     summary: "{{title}} — {{date}}"
@@ -74,98 +43,6 @@ collections:
           hint: "Email address or phone number for bookings or enquiries." }
       - { label: Image,               name: image,      widget: image,    required: false }
 
-  - name: minutes
-    label: Minutes & Agendas
-    label_singular: Meeting
-    folder: content/minutes
-    create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{fields.meeting_type}}"
-    summary: "{{meeting_type}} — {{date}}"
-    fields:
-      - { label: Meeting Date, name: date, widget: date }
-      - label: Meeting Type
-        name: meeting_type
-        widget: select
-        options:
-          - Ordinary
-          - Extraordinary
-          - Annual Parish Council Meeting (APCM)
-          - Annual Parish Meeting (APM)
-          - Planning
-          - Community Meeting
-      - label: Status
-        name: status
-        widget: select
-        default: Agenda Only
-        options:
-          - Agenda Only
-          - Draft Minutes
-          - Minutes Approved
-        hint: "Update this as the meeting progresses. Draft minutes are shown with a 'Draft' badge."
-      - { label: Agenda PDF,  name: agenda,      widget: file, required: false,
-          hint: "Upload the agenda PDF before the meeting." }
-      - { label: Minutes PDF, name: minutes_pdf, widget: file, required: false,
-          hint: "Upload once minutes have been prepared. Change Status to 'Minutes Approved' once confirmed at the next meeting." }
-      - { label: Notes,       name: body,        widget: markdown, required: false,
-          hint: "Any additional notes to display on the website (optional)." }
-
-  - name: councillors
-    label: Parish Councillors
-    label_singular: Councillor
-    folder: content/councillors
-    create: true
-    slug: "{{slug}}"
-    summary: "{{title}} — {{role}}"
-    fields:
-      - { label: Full Name, name: title, widget: string }
-      - { label: Role,      name: role,  widget: string, required: false,
-          hint: "e.g. Chair, Vice-Chair, Clerk" }
-      - { label: Photo,     name: photo, widget: image,  required: false }
-
-  - name: finance
-    label: Finance Documents
-    label_singular: Finance document
-    folder: content/finance
-    create: true
-    slug: "{{year}}-{{slug}}"
-    summary: "{{title}} — {{year}}"
-    fields:
-      - { label: Title,    name: title,    widget: string }
-      - { label: Year,     name: year,     widget: string, hint: "e.g. 2025–26" }
-      - { label: Date,     name: date,     widget: date }
-      - label: Document Type
-        name: doc_type
-        widget: select
-        options:
-          - Precept
-          - Annual Return
-          - Internal Audit
-          - External Audit
-          - Budget
-          - Other
-      - { label: Document, name: file,     widget: file }
-
-  - name: publications
-    label: Council Publications
-    label_singular: Publication
-    folder: content/publications
-    create: true
-    slug: "{{slug}}"
-    summary: "{{title}}"
-    fields:
-      - { label: Title,    name: title,    widget: string }
-      - { label: Date,     name: date,     widget: date }
-      - label: Category
-        name: category
-        widget: select
-        options:
-          - Policy
-          - Procedure
-          - Standing Orders
-          - Code of Conduct
-          - Other
-      - { label: Document, name: file,     widget: file }
-
   # ══════════════════════════════════════════════════════════════
   # PAGES — editors update existing pages, cannot create new ones
   # ══════════════════════════════════════════════════════════════
@@ -178,51 +55,37 @@ collections:
         label: Home Page
         file: content/_index.md
         fields:
-          - { label: Welcome heading, name: title, widget: string }
-          - { label: Welcome text,    name: body,  widget: markdown }
+          - { label: Page title, name: title, widget: string }
+          - { label: Body,       name: body,  widget: markdown }
 
-      - name: village_hall
-        label: Village Hall — Main Page
-        file: content/village-hall/_index.md
+      - name: about
+        label: About
+        file: content/about.md
         fields:
-          - { label: Page title,      name: title,          widget: string }
-          - { label: Intro text,      name: intro,          widget: markdown }
-          - { label: Charity number,  name: charity_number, widget: string, required: false }
-          - { label: Contact email,   name: contact_email,  widget: string }
-          - label: Committee Members
-            name: committee
-            widget: list
-            hint: "Add or remove committee members. Changes appear on the Village Hall page."
-            fields:
-              - { label: Name, name: name, widget: string }
-              - { label: Role, name: role, widget: string, required: false }
-          - label: Photos
-            name: photos
-            widget: list
-            required: false
-            fields:
-              - { label: Photo,    name: photo, widget: image }
-              - { label: Alt text, name: alt,   widget: string,
-                  hint: "Describe the photo for people who cannot see it." }
+          - { label: Page title, name: title, widget: string }
+          - { label: Body,       name: body,  widget: markdown }
 
-      - name: bookings
-        label: Village Hall — Bookings
-        file: content/village-hall/bookings.md
+      - name: facilities
+        label: Facilities & Hire Rates
+        file: content/facilities.md
         fields:
-          - { label: Page title,                  name: title,               widget: string }
-          - { label: Capacity (standing),          name: capacity_total,      widget: number }
-          - { label: Capacity (seated),            name: capacity_seated,     widget: number }
-          - { label: Hire rate — residents (£/hr), name: rate_residents,      widget: number, value_type: float }
-          - { label: Hire rate — non-residents (£/hr), name: rate_non_residents, widget: number, value_type: float }
-          - { label: Booking email,                name: booking_email,       widget: string }
-          - { label: Additional information,       name: body,                widget: markdown, required: false }
+          - { label: Page title, name: title, widget: string }
+          - { label: Body,       name: body,  widget: markdown }
 
-      - name: village_hall_regular
-        label: Village Hall — Regular Activities
-        file: content/village-hall/events/_index.md
+      - name: contact
+        label: Contact & Bookings
+        file: content/contact.md
         fields:
+          - { label: Page title, name: title, widget: string }
+          - { label: Body,       name: body,  widget: markdown }
+
+      - name: events_intro
+        label: Events — Regular Activities
+        file: content/events/_index.md
+        fields:
+          - { label: Page title, name: title, widget: string }
           - { label: Intro text, name: intro, widget: markdown,
-              hint: "Describe regular weekly or monthly activities here. One-off events are managed separately under Village Hall Events." }
+              hint: "Describe regular weekly or monthly activities here. One-off events are managed separately under Events." }
           - label: Regular Activities
             name: activities
             widget: list
@@ -232,69 +95,3 @@ collections:
                   hint: "e.g. Every Tuesday, 10am–12pm" }
               - { label: Cost,          name: cost,     widget: string, required: false }
               - { label: Description,   name: body,     widget: markdown, required: false }
-
-      - name: parish_council
-        label: Parish Council — Main Page
-        file: content/parish-council/_index.md
-        fields:
-          - { label: Page title, name: title, widget: string }
-          - { label: Body,       name: body,  widget: markdown }
-
-      - name: local_reps
-        label: Local Representatives
-        file: content/parish-council/local-representatives.md
-        fields:
-          - { label: Page title,            name: title,    widget: string }
-          - { label: MP name,               name: mp,       widget: string }
-          - { label: County Councillor,     name: county,   widget: string }
-          - { label: District Councillor,   name: district, widget: string }
-          - { label: Additional info,       name: body,     widget: markdown, required: false }
-
-      - name: eligibility
-        label: Becoming a Councillor
-        file: content/parish-council/eligibility.md
-        fields:
-          - { label: Page title, name: title, widget: string }
-          - { label: Body,       name: body,  widget: markdown }
-
-      - name: defibrillator
-        label: Community Defibrillator
-        file: content/parish-council/defibrillator.md
-        fields:
-          - { label: Page title,      name: title,     widget: string }
-          - { label: Body,            name: body,      widget: markdown }
-          - { label: Map embed code,  name: map_embed, widget: string, required: false,
-              hint: "Paste a Google Maps embed URL if needed." }
-
-      - name: wanderer
-        label: The Weston Wanderer
-        file: content/wanderer/_index.md
-        fields:
-          - { label: Page title, name: title, widget: string }
-          - { label: Body,       name: body,  widget: markdown }
-
-      - name: links
-        label: Links
-        file: content/links.md
-        fields:
-          - { label: Page title, name: title, widget: string }
-          - { label: Body,       name: body,  widget: markdown }
-
-      - name: accessibility
-        label: Accessibility Statement
-        file: content/accessibility.md
-        fields:
-          - { label: Page title,     name: title,              widget: string }
-          - { label: Last reviewed,  name: last_reviewed,      widget: date }
-          - { label: Contact email,  name: contact_email,      widget: string,
-              hint: "Email for residents to request content in an alternative format." }
-          - { label: Known issues,   name: known_issues,       widget: markdown, required: false,
-              hint: "List any known accessibility limitations. Leave blank if fully compliant." }
-          - { label: Body,           name: body,               widget: markdown }
-
-      - name: privacy
-        label: Privacy Policy
-        file: content/privacy-policy.md
-        fields:
-          - { label: Page title, name: title, widget: string }
-          - { label: Body,       name: body,  widget: markdown }

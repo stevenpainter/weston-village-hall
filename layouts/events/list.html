@@ -1,33 +1,43 @@
 {{ define "main" }}
 
-  <nav aria-label="Breadcrumb" class="breadcrumb">
-    <a href="/">Home</a>
-    <span class="breadcrumb__separator" aria-hidden="true">›</span>
-    <a href="/village-hall/">Village Hall</a>
-    <span class="breadcrumb__separator" aria-hidden="true">›</span>
-    <span aria-current="page">Events</span>
-  </nav>
-
   <header class="page-header">
-    <h1>Village Hall Events</h1>
+    <h1>{{ .Title }}</h1>
     <p style="font-size: var(--text-lg); color: var(--color-text-muted); margin-bottom: 0;">
       Upcoming events and regular activities at Weston Village Hall.
     </p>
   </header>
 
-  {{/* Page intro / regular activities — editable via Decap */}}
-  {{ with .Content }}
-    <div class="prose" style="margin-bottom: var(--space-10);">
-      {{ . }}
-    </div>
+  {{ with .Params.intro }}
+    <div class="prose" style="margin-bottom: var(--space-10);">{{ . | markdownify }}</div>
   {{ end }}
 
-  {{/* Separate upcoming from past events */}}
+  {{ if .Params.activities }}
+    <h2>Regular activities</h2>
+    <ul class="card-list" role="list" style="margin-bottom: var(--space-10);">
+      {{ range .Params.activities }}
+        <li>
+          <article class="event-card">
+            <div>
+              <h3 class="event-card__title">{{ .name }}</h3>
+              <p class="event-card__time">{{ .schedule }}</p>
+              {{ with .cost }}
+                <span class="badge badge--green" style="margin-bottom: var(--space-3);">{{ . }}</span>
+              {{ end }}
+              {{ with .body }}
+                <div class="prose">{{ . | markdownify }}</div>
+              {{ end }}
+            </div>
+          </article>
+        </li>
+      {{ end }}
+    </ul>
+  {{ end }}
+
+  {{/* Separate upcoming from past one-off events, created individually via the CMS */}}
   {{ $now      := now }}
   {{ $upcoming := where .Pages "Params.date" "ge" $now }}
   {{ $past     := where .Pages "Params.date" "lt" $now }}
 
-  {{/* Upcoming events */}}
   {{ if $upcoming }}
     <h2>Upcoming events</h2>
     <ul class="card-list" role="list" style="margin-bottom: var(--space-10);">

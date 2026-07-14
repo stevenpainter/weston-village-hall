@@ -1,4 +1,4 @@
-# Weston Parish Council — Website
+# Weston Village Hall — Website
 
 Hugo + Decap CMS + Cloudflare Pages.
 
@@ -24,8 +24,8 @@ Hugo + Decap CMS + Cloudflare Pages.
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-org/weston-parish
-cd weston-parish
+git clone https://github.com/stevenpainter/weston-village-hall
+cd weston-village-hall
 
 # Start dev server
 hugo server -D
@@ -35,18 +35,19 @@ hugo server -D
 
 ---
 
-## Deployment (Cloudflare Pages)
+## Deployment (Cloudflare)
+
+Cloudflare's dashboard now deploys Git-connected static sites as **Workers with static assets** rather than classic Pages projects. The build output directory is configured in `wrangler.jsonc` (`assets.directory`), not a dashboard field.
 
 1. Push this repo to GitHub
-2. Log in to [Cloudflare Pages](https://pages.cloudflare.com)
-3. Create a new project → Connect to Git → select your repo
-4. Set build settings:
+2. In the Cloudflare dashboard: **Compute (Workers) → Create → Import a repository**
+3. Select this repo and configure:
    - **Build command:** `hugo --minify`
-   - **Build output directory:** `public`
    - **Environment variable:** `HUGO_VERSION` = `0.147.0`
-5. Deploy
+   - **Path:** leave as `/` (this isn't a monorepo)
+4. Deploy
 
-Every push to `main` triggers a new build and deploy automatically (~30 seconds).
+Every push to `main` triggers a new build and deploy automatically.
 
 ---
 
@@ -54,32 +55,24 @@ Every push to `main` triggers a new build and deploy automatically (~30 seconds)
 
 Decap CMS uses GitHub as a backend — editors commit content directly to the repo via the CMS interface.
 
-1. In `static/admin/config.yml`, set `backend.repo` to your GitHub repo (`your-org/weston-parish`)
-2. In the Cloudflare Pages dashboard, add the domain to your Cloudflare account
-3. Set up [Cloudflare Access](https://one.cloudflare.com/) to protect `/admin`:
+1. In `static/admin/config.yml`, `backend.repo` is already set to `stevenpainter/weston-village-hall`
+2. Set up [Cloudflare Access](https://one.cloudflare.com/) to protect `/admin`:
    - Create an Access Application for `yourdomain.com/admin`
    - Add allowed email addresses for each editor
-4. Editors visit `yourdomain.com/admin`, authenticate with their email, and can manage content
-
-For more granular roles (e.g. hall committee can only see events), Decap CMS supports this via Netlify Identity — switch the backend to `netlify` and configure roles there if needed.
+3. Editors visit `yourdomain.com/admin`, authenticate with their email, and can manage content
 
 ---
 
 ## Accessibility
 
-This site is built to WCAG 2.2 AA and GDS accessibility standards.
+The site uses accessible markup (skip link, landmark roles, keyboard-navigable nav toggle) and the Atkinson Hyperlegible font, but there is currently no published accessibility statement page.
 
 - Run `npx axe-cli https://localhost:1313` to automated-check any page
 - Test keyboard navigation manually before each release
-- Test with VoiceOver (macOS: Cmd+F5) on key journeys:
-  - Homepage → Minutes → open a year → download a PDF
-  - Homepage → Village Hall → Events
-  - Mobile nav toggle
-- The accessibility statement lives at `/accessibility/` and must be updated when the site changes
 
 ### Automated testing in CI
 
-Add to your Cloudflare Pages build or a GitHub Action:
+Add to your Cloudflare build or a GitHub Action:
 
 ```bash
 npm install -g @axe-core/cli
@@ -91,50 +84,52 @@ axe http://localhost:1313 --exit
 
 ## Content management
 
-### Adding meeting minutes
+### Adding an event
 
 1. Go to `yourdomain.com/admin`
-2. Click **Minutes & Agendas** → **New Meeting**
-3. Set the date, meeting type, and status (Agenda Only)
-4. Upload the agenda PDF
-5. Save and publish — the page rebuilds in ~30 seconds
-6. After the meeting, come back to the same entry, upload the minutes PDF, change status to **Draft Minutes**, save
-7. Once approved at the next meeting, change status to **Minutes Approved**
+2. Click **Events** → **New Event**
+3. Fill in title, date/time, type, and description
+4. Save — it appears on the Events page automatically
+5. Past events collapse into the "Past events" accordion automatically
 
-### Adding village hall events
+### Editing regular activities (Coffee Morning, Craft Group, etc.)
 
-1. Click **Village Hall Events** → **New Event**
-2. Fill in title, date/time, type, and description
-3. Save — it appears on the events page automatically
-4. Past events collapse into the "Past events" accordion automatically
+1. Click **Pages** → **Events — Regular Activities**
+2. Edit the intro text or the list of regular activities
+3. Save and publish
+
+### Editing Home, About, Facilities, or Contact
+
+1. Click **Pages** → the page you want to edit
+2. Edit the body text
+3. Save and publish
 
 ---
 
 ## File structure
 
 ```
-weston-parish/
-├── config.yaml              # Hugo config and menus
-├── content/                 # All CMS-managed content (Markdown + front matter)
-│   ├── _index.md            # Home page
-│   ├── village-hall/
-│   ├── minutes/
-│   ├── news/
-│   ├── notices/
-│   ├── councillors/
-│   ├── finance/
-│   ├── publications/
-│   └── accessibility.md
-├── layouts/                 # Hugo HTML templates
+weston-village-hall/
+├── config.yaml               # Hugo config and menu
+├── wrangler.jsonc             # Cloudflare Workers static-assets config
+├── content/                  # All CMS-managed content (Markdown + front matter)
+│   ├── _index.md              # Home page
+│   ├── about.md
+│   ├── facilities.md
+│   ├── contact.md
+│   └── events/
+│       ├── _index.md          # Intro + regular activities
+│       └── ...                # Individual events, created via the CMS
+├── layouts/                  # Hugo HTML templates
 │   ├── _default/
-│   ├── partials/            # Reusable fragments (head, header, footer, pdf-link)
-│   ├── minutes/
-│   ├── village-hall/
-│   └── news/
+│   ├── partials/               # Reusable fragments (head, header, footer)
+│   ├── index.html              # Home page template
+│   └── events/
 ├── assets/
-│   ├── css/                 # Modular CSS (processed by Hugo Pipes)
-│   └── js/                  # Accessible nav toggle
+│   ├── css/                    # Modular CSS (processed by Hugo Pipes)
+│   └── js/                     # Accessible nav toggle
 └── static/
-    ├── admin/               # Decap CMS entry point
-    └── uploads/             # Editor-uploaded PDFs and images
+    ├── _headers                # Cloudflare response headers (security, caching)
+    ├── admin/                  # Decap CMS entry point
+    └── uploads/                # Editor-uploaded images
 ```

@@ -3,12 +3,11 @@
 
     {{/* About column */}}
     <div>
-      <p class="site-footer__heading">Weston Parish Council</p>
+      <p class="site-footer__heading">Weston Village Hall</p>
       <p style="font-size: var(--text-sm); color: rgba(255,255,255,0.75); line-height: 1.6; margin-bottom: var(--space-4);">
-        Serving the village of Weston, Nottinghamshire. The parish council meets regularly and all residents are welcome to attend meetings.
+        A community venue for hire in {{ .Site.Params.address }}.
       </p>
       <p style="font-size: var(--text-sm); color: rgba(255,255,255,0.75);">
-        Clerk:
         <a href="mailto:{{ .Site.Params.contactEmail }}">{{ .Site.Params.contactEmail }}</a>
       </p>
     </div>
@@ -17,37 +16,26 @@
     <div>
       <p class="site-footer__heading">Quick links</p>
       <ul class="site-footer__links" role="list">
-        <li><a href="/minutes/">Minutes &amp; Agendas</a></li>
-        <li><a href="/village-hall/">Village Hall</a></li>
-        <li><a href="/village-hall/bookings/">Hall Bookings</a></li>
-        <li><a href="/news/">News</a></li>
-        <li><a href="/notices/">Notices</a></li>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/facilities/">Facilities</a></li>
+        <li><a href="/events/">Events</a></li>
+        <li><a href="/contact/">Contact</a></li>
       </ul>
     </div>
 
-    {{/* Legal / accessibility column */}}
+    {{/* Keep up to date column */}}
     <div>
-      <p class="site-footer__heading">Information</p>
+      <p class="site-footer__heading">Keep up to date</p>
       <ul class="site-footer__links" role="list">
-        <li><a href="/accessibility/">Accessibility statement</a></li>
-        <li><a href="/privacy-policy/">Privacy policy</a></li>
-        <li><a href="/links/">Useful links</a></li>
-        <li>
-          <a
-            href="https://www.nottinghamshire.gov.uk"
-            rel="noopener noreferrer"
-          >Nottinghamshire County Council</a>
-        </li>
+        <li>Facebook: {{ .Site.Params.facebook }}</li>
+        <li>Instagram: @{{ .Site.Params.instagram }}</li>
       </ul>
     </div>
 
   </div>
 
   <div class="site-footer__bottom">
-    <span>&copy; {{ now.Year }} Weston Parish Council. All rights reserved.</span>
-    <span>
-      Website accessibility: <a href="/accessibility/">WCAG 2.2 AA compliant</a>
-    </span>
+    <span>&copy; {{ now.Year }} Weston Village Hall. All rights reserved.</span>
   </div>
 
 </div>
