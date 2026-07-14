@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {{ partial "head.html" . }}
+  </head>
+  <body class="site-wrapper">
+
+    {{/* Skip link — first focusable element on every page, GDS requirement */}}
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    {{/* aria-live region for announcing dynamic changes (menu open/close) */}}
+    <div
+      id="nav-live-region"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      class="sr-only"
+    ></div>
+
+    <header class="site-header" role="banner">
+      {{ partial "header.html" . }}
+    </header>
+
+    <main id="main-content" class="site-main" role="main" tabindex="-1">
+      {{/* tabindex="-1" allows skip link to focus <main> programmatically */}}
+      {{ block "main" . }}{{ end }}
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+      {{ partial "footer.html" . }}
+    </footer>
+
+    {{/* JS at end of body — progressive enhancement, nav works without it */}}
+    {{ $js := resources.Get "js/nav.js" | minify }}
+    <script src="{{ $js.RelPermalink }}"></script>
+
+  </body>
+</html>

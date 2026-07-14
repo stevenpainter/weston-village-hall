@@ -1,0 +1,513 @@
+/* ============================================================
+   COMPONENTS
+   ============================================================ */
+
+/* ── PDF Link Row
+   Reusable pattern for all document downloads.
+   Always includes: descriptive title, type badge, file size.
+   Never uses vague link text like "download" or "here".
+   ============================================================ */
+
+.pdf-link {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--color-text);
+  transition: border-color var(--transition-fast),
+              background-color var(--transition-fast);
+  min-height: 44px;
+}
+
+.pdf-link:hover {
+  border-color: var(--color-green-mid);
+  background-color: var(--color-green-light);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.pdf-link:focus-visible {
+  outline: 3px solid var(--color-amber);
+  outline-offset: 2px;
+  background-color: var(--color-amber-light);
+}
+
+.pdf-link__icon {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  background: var(--color-error);
+  color: var(--color-white);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-ui);
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.pdf-link__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.pdf-link__title {
+  font-weight: 600;
+  font-size: var(--text-base);
+  display: block;
+}
+
+.pdf-link__meta {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  display: block;
+  margin-top: var(--space-1);
+}
+
+.pdf-link__badge {
+  flex-shrink: 0;
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.pdf-link__badge--agenda  { background: #DBEAFE; color: #1E40AF; }
+.pdf-link__badge--minutes { background: #D1FAE5; color: #065F46; }
+.pdf-link__badge--draft   { background: #FEF3C7; color: #92400E; }
+
+/* ── Minutes accordion (year groups) ── */
+
+.minutes-jump-nav {
+  margin-bottom: var(--space-8);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+}
+
+.minutes-jump-nav__label {
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-right: var(--space-2);
+}
+
+.minutes-jump-nav__links {
+  display: inline;
+}
+
+.minutes-jump-nav__links a {
+  margin-right: var(--space-3);
+  color: var(--color-green-deep);
+  font-weight: 500;
+}
+
+.minutes-year {
+  margin-bottom: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+/* <details> / <summary> accordion */
+.minutes-year__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-parchment-mid);
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--color-green-deep);
+  list-style: none;
+  min-height: 44px;
+  user-select: none;
+}
+
+/* Remove default triangle in Safari */
+.minutes-year__summary::-webkit-details-marker { display: none; }
+
+.minutes-year__summary:hover {
+  background: var(--color-green-light);
+}
+
+.minutes-year__summary:focus-visible {
+  outline: 3px solid var(--color-amber);
+  outline-offset: -3px;
+  background: var(--color-amber-light);
+}
+
+.minutes-year__chevron {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  transition: transform var(--transition-fast);
+  color: var(--color-text-muted);
+}
+
+details[open] .minutes-year__chevron {
+  transform: rotate(180deg);
+}
+
+.minutes-year__count {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--color-text-muted);
+  margin-left: var(--space-2);
+}
+
+.minutes-year__body {
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  background: var(--color-white);
+}
+
+/* ── Meeting row (inside accordion) ── */
+
+.meeting-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-parchment);
+}
+
+@media (min-width: 600px) {
+  .meeting-row {
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+  }
+}
+
+.meeting-row__date {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.meeting-row__type {
+  font-weight: 600;
+  font-size: var(--text-base);
+}
+
+.meeting-row__docs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+/* ── Content cards (news, notices, events) ── */
+
+.card-list {
+  display: grid;
+  gap: var(--space-5);
+  list-style: none;
+}
+
+@media (min-width: 600px) {
+  .card-list--two-col {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.card {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow var(--transition-fast);
+}
+
+.card:hover {
+  box-shadow: 0 4px 16px rgba(44, 74, 46, 0.12);
+}
+
+.card__img {
+  width: 100%;
+  height: 12rem;
+  object-fit: cover;
+}
+
+.card__body {
+  padding: var(--space-5) var(--space-6);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.card__meta {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.card__title {
+  font-size: var(--text-lg);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--color-green-deep);
+  line-height: 1.3;
+}
+
+.card__title a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.card__title a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.card__summary {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.card__read-more {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-green-deep);
+  margin-top: var(--space-3);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+/* ── Event cards ── */
+
+.event-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-green-deep);
+  border-radius: var(--radius-md);
+  padding: var(--space-5) var(--space-6);
+  display: grid;
+  gap: var(--space-3);
+}
+
+@media (min-width: 600px) {
+  .event-card {
+    grid-template-columns: 5rem 1fr;
+  }
+}
+
+.event-card__date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-green-deep);
+  color: var(--color-white);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  text-align: center;
+  font-family: var(--font-ui);
+  min-width: 5rem;
+  height: fit-content;
+}
+
+.event-card__day {
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.event-card__month {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+.event-card__title {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-green-deep);
+  margin-bottom: var(--space-1);
+}
+
+.event-card__time {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-2);
+}
+
+/* ── Status badge ── */
+
+.badge {
+  display: inline-block;
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.badge--green  { background: #D1FAE5; color: #065F46; }
+.badge--yellow { background: #FEF3C7; color: #92400E; }
+.badge--blue   { background: #DBEAFE; color: #1E40AF; }
+.badge--grey   { background: var(--color-parchment-mid); color: var(--color-text-muted); }
+
+/* ── Notice callout ── */
+
+.notice-callout {
+  background: var(--color-amber-light);
+  border: 1px solid var(--color-amber);
+  border-left: 4px solid var(--color-amber);
+  border-radius: var(--radius-md);
+  padding: var(--space-5) var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+.notice-callout__title {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-amber);
+  margin-bottom: var(--space-2);
+}
+
+/* ── Responsive tables ── */
+
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-6);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  min-width: 30rem;
+}
+
+th {
+  background: var(--color-green-deep);
+  color: var(--color-white);
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+}
+
+td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+tr:last-child td { border-bottom: none; }
+tr:nth-child(even) td { background: var(--color-parchment); }
+
+/* ── Pagination ── */
+
+.pagination {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: var(--space-10);
+  font-family: var(--font-ui);
+}
+
+.pagination a,
+.pagination span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--color-green-deep);
+  transition: background-color var(--transition-fast);
+}
+
+.pagination a:hover  { background: var(--color-green-light); }
+.pagination .current { background: var(--color-green-deep); color: var(--color-white); border-color: var(--color-green-deep); }
+
+/* ── Councillors grid ── */
+
+.councillors-grid {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: 1fr;
+  list-style: none;
+}
+
+@media (min-width: 600px) {
+  .councillors-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 960px) {
+  .councillors-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.councillor-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.councillor-card__name {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-green-deep);
+}
+
+.councillor-card__role {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}

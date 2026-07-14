@@ -1,0 +1,112 @@
+{{ define "main" }}
+
+  <nav aria-label="Breadcrumb" class="breadcrumb">
+    <a href="/">Home</a>
+    <span class="breadcrumb__separator" aria-hidden="true">›</span>
+    <a href="/village-hall/">Village Hall</a>
+    <span class="breadcrumb__separator" aria-hidden="true">›</span>
+    <span aria-current="page">Events</span>
+  </nav>
+
+  <header class="page-header">
+    <h1>Village Hall Events</h1>
+    <p style="font-size: var(--text-lg); color: var(--color-text-muted); margin-bottom: 0;">
+      Upcoming events and regular activities at Weston Village Hall.
+    </p>
+  </header>
+
+  {{/* Page intro / regular activities — editable via Decap */}}
+  {{ with .Content }}
+    <div class="prose" style="margin-bottom: var(--space-10);">
+      {{ . }}
+    </div>
+  {{ end }}
+
+  {{/* Separate upcoming from past events */}}
+  {{ $now      := now }}
+  {{ $upcoming := where .Pages "Params.date" "ge" $now }}
+  {{ $past     := where .Pages "Params.date" "lt" $now }}
+
+  {{/* Upcoming events */}}
+  {{ if $upcoming }}
+    <h2>Upcoming events</h2>
+    <ul class="card-list" role="list" style="margin-bottom: var(--space-10);">
+      {{ range $upcoming.ByParam "date" }}
+        <li>
+          <article class="event-card">
+
+            {{/* Date block — visual calendar treatment */}}
+            <div class="event-card__date" aria-hidden="true">
+              <span class="event-card__day">{{ .Params.date | time.Format "2" }}</span>
+              <span class="event-card__month">{{ .Params.date | time.Format "Jan" }}</span>
+            </div>
+
+            <div>
+              <h3 class="event-card__title">{{ .Title }}</h3>
+
+              <p class="event-card__time">
+                {{/* Machine-readable datetime for assistive tech */}}
+                <time datetime="{{ (.Params.date | time.Format "2006-01-02T15:04") }}">
+                  {{ .Params.date | time.Format "Monday 2 January 2006, 3:04pm" }}
+                </time>
+                {{ with .Params.end_date }}
+                  – <time datetime="{{ (. | time.Format "2006-01-02T15:04") }}">
+                    {{ . | time.Format "3:04pm" }}
+                  </time>
+                {{ end }}
+              </p>
+
+              {{ with .Params.event_type }}
+                <span class="badge badge--green" style="margin-bottom: var(--space-3);">{{ . }}</span>
+              {{ end }}
+
+              <div class="prose">{{ .Content }}</div>
+
+              {{ with .Params.contact }}
+                <p style="font-size: var(--text-sm); margin-top: var(--space-3); margin-bottom: 0;">
+                  <strong>Contact / booking:</strong>
+                  {{ if contains . "@" }}
+                    <a href="mailto:{{ . }}">{{ . }}</a>
+                  {{ else }}
+                    {{ . }}
+                  {{ end }}
+                </p>
+              {{ end }}
+            </div>
+
+          </article>
+        </li>
+      {{ end }}
+    </ul>
+  {{ else }}
+    <p class="text-muted" style="margin-bottom: var(--space-10);">No upcoming events at the moment. Check back soon.</p>
+  {{ end }}
+
+  {{/* Past events — collapsed, less prominent */}}
+  {{ if $past }}
+    <details class="minutes-year" style="margin-top: var(--space-8);">
+      <summary class="minutes-year__summary">
+        <span>Past events <span class="minutes-year__count">({{ len $past }})</span></span>
+        <svg class="minutes-year__chevron" aria-hidden="true" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
+        </svg>
+      </summary>
+      <div class="minutes-year__body">
+        {{ range $past.ByDate.Reverse }}
+          <div class="meeting-row">
+            <span class="meeting-row__date">
+              <time datetime="{{ .Params.date | time.Format "2006-01-02" }}">
+                {{ .Params.date | time.Format "2 Jan 2006" }}
+              </time>
+            </span>
+            <span class="meeting-row__type">{{ .Title }}</span>
+            {{ with .Params.event_type }}
+              <span class="badge badge--grey">{{ . }}</span>
+            {{ end }}
+          </div>
+        {{ end }}
+      </div>
+    </details>
+  {{ end }}
+
+{{ end }}

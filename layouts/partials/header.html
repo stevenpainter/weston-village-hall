@@ -1,0 +1,62 @@
+<div class="site-header__inner">
+
+  {{/* Brand / site name */}}
+  <a href="/" class="site-header__brand" aria-label="{{ .Site.Title }} — home">
+    <span class="site-header__name">Weston Parish Council</span>
+    <span class="site-header__tagline">Nottinghamshire</span>
+  </a>
+
+  {{/* Mobile toggle button
+       aria-expanded and aria-controls updated by nav.js
+       Visible label + icon — never icon-only */}}
+  <button
+    id="nav-toggle"
+    class="nav-toggle"
+    aria-expanded="false"
+    aria-controls="nav-list"
+    aria-label="Toggle navigation menu"
+    type="button"
+  >
+    <span class="nav-toggle__icon" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
+    <span>Menu</span>
+  </button>
+
+  {{/* Primary navigation
+       aria-label distinguishes this from any other <nav> on the page */}}
+  <nav class="site-nav" aria-label="Primary">
+    <ul id="nav-list" class="nav-list" role="list">
+      {{ range .Site.Menus.main }}
+        {{/* Check if this item or any child is the current page */}}
+        {{ $isActive := or (eq $.RelPermalink .URL) (hasPrefix $.RelPermalink .URL) }}
+        <li class="nav-list__item">
+          <a
+            href="{{ .URL }}"
+            class="nav-list__link"
+            {{ if $isActive }}aria-current="page"{{ end }}
+          >{{ .Name }}</a>
+
+          {{/* Submenu items — defined via menu params in config.yaml */}}
+          {{ with .Params.children }}
+            <ul class="nav-list__subnav" role="list">
+              {{ range . }}
+                {{ $subActive := eq $.RelPermalink .url }}
+                <li>
+                  <a
+                    href="{{ .url }}"
+                    class="nav-list__link"
+                    {{ if $subActive }}aria-current="page"{{ end }}
+                  >{{ .name }}</a>
+                </li>
+              {{ end }}
+            </ul>
+          {{ end }}
+        </li>
+      {{ end }}
+    </ul>
+  </nav>
+
+</div>

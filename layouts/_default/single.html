@@ -1,0 +1,30 @@
+{{ define "main" }}
+
+  {{/* Breadcrumb — helps users orient themselves, especially with screen readers */}}
+  {{ if not .IsHome }}
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <a href="/">Home</a>
+      <span class="breadcrumb__separator" aria-hidden="true">›</span>
+      {{ range .Ancestors.Reverse }}
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        <span class="breadcrumb__separator" aria-hidden="true">›</span>
+      {{ end }}
+      <span aria-current="page">{{ .Title }}</span>
+    </nav>
+  {{ end }}
+
+  <article>
+    <header class="page-header">
+      {{/* Single h1 per page, matching <title> */}}
+      <h1>{{ .Title }}</h1>
+      {{ with .Params.intro }}
+        <p style="font-size: var(--text-lg); color: var(--color-text-muted); margin-bottom: 0;">{{ . }}</p>
+      {{ end }}
+    </header>
+
+    <div class="prose">
+      {{ .Content }}
+    </div>
+  </article>
+
+{{ end }}

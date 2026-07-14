@@ -1,0 +1,37 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+
+<title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} — {{ .Site.Title }}{{ end }}</title>
+
+{{/* Fonts — preconnect first, then load
+     Atkinson Hyperlegible: designed for low-vision readers
+     Lora: characterful serif for headings */}}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Lora:wght@600;700&display=swap"
+  rel="stylesheet"
+>
+
+{{/* CSS — bundled and minified by Hugo pipes */}}
+{{ $base       := resources.Get "css/base.css" }}
+{{ $layout     := resources.Get "css/layout.css" }}
+{{ $nav        := resources.Get "css/nav.css" }}
+{{ $components := resources.Get "css/components.css" }}
+{{ $css := slice $base $layout $nav $components | resources.Concat "css/main.css" | minify }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}">
+
+{{/* Canonical URL */}}
+<link rel="canonical" href="{{ .Permalink }}">
+
+{{/* RSS feeds */}}
+{{ range .AlternativeOutputFormats }}
+  <link rel="{{ .Rel }}" type="{{ .MediaType.Type }}" href="{{ .Permalink }}" title="{{ $.Site.Title }}">
+{{ end }}
+
+{{/* Open Graph */}}
+<meta property="og:title"       content="{{ .Title }}">
+<meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+<meta property="og:url"         content="{{ .Permalink }}">
+<meta property="og:type"        content="website">
