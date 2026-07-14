@@ -56,6 +56,9 @@ collections:
         file: content/_index.md
         fields:
           - { label: Page title, name: title, widget: string }
+          - { label: Hero image, name: image, widget: image, required: false }
+          - { label: Hero image alt text, name: image_alt, widget: string, required: false,
+              hint: "Describe the image for people who cannot see it. Required if an image is set." }
           - { label: Body,       name: body,  widget: markdown }
 
       - name: about
