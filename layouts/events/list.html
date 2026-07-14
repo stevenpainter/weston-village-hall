@@ -14,27 +14,71 @@
     <div class="prose" style="margin-bottom: var(--space-10);">{{ . | markdownify }}</div>
   {{ end }}
 
-  {{ if $page.activities }}
-    <h2>Regular activities</h2>
-    <ul class="card-list" role="list" style="margin-bottom: var(--space-10);">
-      {{ range $page.activities }}
-        <li>
-          <article class="event-card">
-            <div style="grid-column: 1 / -1;">
-              <h3 class="event-card__title">{{ .name }}</h3>
-              <p class="event-card__time">{{ .schedule }}</p>
-              {{ with .cost }}
-                <span class="badge badge--green" style="margin-bottom: var(--space-3);">{{ . }}</span>
-              {{ end }}
-              {{ with .body }}
-                <div class="prose">{{ . | markdownify }}</div>
-              {{ end }}
-            </div>
-          </article>
-        </li>
+  <div class="events-top-grid">
+
+    {{ if $page.activities }}
+      <div class="events-top-grid__activities">
+        <h2 class="sr-only">Regular activities</h2>
+        <ul class="card-list" role="list">
+          {{ range $page.activities }}
+            <li>
+              <article class="event-card">
+                <div style="grid-column: 1 / -1;">
+                  <h3 class="event-card__title">{{ .name }}</h3>
+                  <p class="event-card__time">{{ .schedule }}</p>
+                  {{ with .cost }}
+                    <span class="badge badge--green" style="margin-bottom: var(--space-3);">{{ . }}</span>
+                  {{ end }}
+                  {{ with .body }}
+                    <div class="prose">{{ . | markdownify }}</div>
+                  {{ end }}
+                </div>
+              </article>
+            </li>
+          {{ end }}
+        </ul>
+      </div>
+    {{ end }}
+
+    {{/* Calendar — a second view of the same one-off events, browsable by month */}}
+    <section class="events-top-grid__calendar" aria-labelledby="calendar-heading">
+      <h2 id="calendar-heading" class="sr-only">Calendar</h2>
+
+      <div class="calendar" id="calendar">
+        <div class="calendar__header">
+          <button type="button" class="calendar__nav" id="calendar-prev" aria-label="Previous month">‹</button>
+          <p class="calendar__month" id="calendar-month-label" aria-live="polite"></p>
+          <button type="button" class="calendar__nav" id="calendar-next" aria-label="Next month">›</button>
+          <button type="button" class="calendar__today" id="calendar-today">Today</button>
+        </div>
+
+        <table class="calendar__grid">
+          <caption class="sr-only" id="calendar-caption"></caption>
+          <thead>
+            <tr>
+              <th scope="col"><abbr title="Monday">Mon</abbr></th>
+              <th scope="col"><abbr title="Tuesday">Tue</abbr></th>
+              <th scope="col"><abbr title="Wednesday">Wed</abbr></th>
+              <th scope="col"><abbr title="Thursday">Thu</abbr></th>
+              <th scope="col"><abbr title="Friday">Fri</abbr></th>
+              <th scope="col"><abbr title="Saturday">Sat</abbr></th>
+              <th scope="col"><abbr title="Sunday">Sun</abbr></th>
+            </tr>
+          </thead>
+          <tbody id="calendar-body"></tbody>
+        </table>
+
+        <div class="calendar__day-events" id="calendar-day-events" aria-live="polite"></div>
+      </div>
+
+      {{ $calendarEvents := slice }}
+      {{ range $data.events }}
+        {{ $calendarEvents = $calendarEvents | append (dict "id" ._id "title" .title "date" .date) }}
       {{ end }}
-    </ul>
-  {{ end }}
+      <script type="application/json" id="calendar-events-data">{{ $calendarEvents | jsonify | safeJS }}</script>
+    </section>
+
+  </div>
 
   {{/* Separate upcoming from past one-off events, created individually in Sanity */}}
   {{ $now := now }}
@@ -129,44 +173,6 @@
       </div>
     </details>
   {{ end }}
-
-  {{/* Calendar — a second view of the same one-off events, browsable by month */}}
-  <section class="calendar-section" aria-labelledby="calendar-heading" style="margin-top: var(--space-10);">
-    <h2 id="calendar-heading">Calendar</h2>
-
-    <div class="calendar" id="calendar">
-      <div class="calendar__header">
-        <button type="button" class="calendar__nav" id="calendar-prev" aria-label="Previous month">‹</button>
-        <p class="calendar__month" id="calendar-month-label" aria-live="polite"></p>
-        <button type="button" class="calendar__nav" id="calendar-next" aria-label="Next month">›</button>
-        <button type="button" class="calendar__today" id="calendar-today">Today</button>
-      </div>
-
-      <table class="calendar__grid">
-        <caption class="sr-only" id="calendar-caption"></caption>
-        <thead>
-          <tr>
-            <th scope="col"><abbr title="Monday">Mon</abbr></th>
-            <th scope="col"><abbr title="Tuesday">Tue</abbr></th>
-            <th scope="col"><abbr title="Wednesday">Wed</abbr></th>
-            <th scope="col"><abbr title="Thursday">Thu</abbr></th>
-            <th scope="col"><abbr title="Friday">Fri</abbr></th>
-            <th scope="col"><abbr title="Saturday">Sat</abbr></th>
-            <th scope="col"><abbr title="Sunday">Sun</abbr></th>
-          </tr>
-        </thead>
-        <tbody id="calendar-body"></tbody>
-      </table>
-
-      <div class="calendar__day-events" id="calendar-day-events" aria-live="polite"></div>
-    </div>
-
-    {{ $calendarEvents := slice }}
-    {{ range $data.events }}
-      {{ $calendarEvents = $calendarEvents | append (dict "id" ._id "title" .title "date" .date) }}
-    {{ end }}
-    <script type="application/json" id="calendar-events-data">{{ $calendarEvents | jsonify | safeJS }}</script>
-  </section>
 
 {{ end }}
 
