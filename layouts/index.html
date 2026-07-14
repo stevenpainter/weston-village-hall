@@ -4,12 +4,13 @@
     <h1>{{ .Title }}</h1>
   </header>
 
-  {{ with .Params.image }}
-    <img class="hero-img" src="{{ . }}" alt="{{ $.Params.image_alt }}">
-  {{ end }}
-
-  <div class="prose">
-    {{ .Content }}
+  <div class="home-hero">
+    <div class="prose">
+      {{ .Content }}
+    </div>
+    {{ with .Params.image }}
+      <img class="home-hero__img" src="{{ . }}" alt="{{ $.Params.image_alt }}">
+    {{ end }}
   </div>
 
 {{ end }}
