@@ -2,3 +2,6 @@ public/
 resources/
 .hugo_build.lock
 .DS_Store
+.env.local
+studio/.env
+studio/.env.local

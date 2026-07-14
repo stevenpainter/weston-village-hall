@@ -1,15 +1,18 @@
 {{ define "main" }}
 
+  {{ $data := partial "sanity-data.html" . }}
+  {{ $page := $data.home }}
+
   <header class="page-header">
-    <h1>{{ .Title }}</h1>
+    <h1>{{ $page.title }}</h1>
   </header>
 
   <div class="home-hero">
     <div class="prose">
-      {{ .Content }}
+      {{ $page.body | markdownify }}
     </div>
-    {{ with .Params.image }}
-      <img class="home-hero__img" src="{{ . }}" alt="{{ $.Params.image_alt }}">
+    {{ with $page.heroImageUrl }}
+      <img class="home-hero__img" src="{{ . }}" alt="{{ $page.heroImageAlt }}">
     {{ end }}
   </div>
 

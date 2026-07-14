@@ -1,23 +1,26 @@
 {{ define "main" }}
 
+  {{ $data := partial "sanity-data.html" . }}
+  {{ $page := $data.eventsIndex }}
+
   <header class="page-header">
-    <h1>{{ .Title }}</h1>
+    <h1>{{ $page.title }}</h1>
     <p style="font-size: var(--text-lg); color: var(--color-text-muted); margin-bottom: 0;">
       Upcoming events and regular activities at Weston Village Hall.
     </p>
   </header>
 
-  {{ with .Params.intro }}
+  {{ with $page.intro }}
     <div class="prose" style="margin-bottom: var(--space-10);">{{ . | markdownify }}</div>
   {{ end }}
 
-  {{ if .Params.activities }}
+  {{ if $page.activities }}
     <h2>Regular activities</h2>
     <ul class="card-list" role="list" style="margin-bottom: var(--space-10);">
-      {{ range .Params.activities }}
+      {{ range $page.activities }}
         <li>
           <article class="event-card">
-            <div>
+            <div style="grid-column: 1 / -1;">
               <h3 class="event-card__title">{{ .name }}</h3>
               <p class="event-card__time">{{ .schedule }}</p>
               {{ with .cost }}
@@ -33,46 +36,54 @@
     </ul>
   {{ end }}
 
-  {{/* Separate upcoming from past one-off events, created individually via the CMS */}}
-  {{ $now      := now }}
-  {{ $upcoming := where .Pages "Params.date" "ge" $now }}
-  {{ $past     := where .Pages "Params.date" "lt" $now }}
+  {{/* Separate upcoming from past one-off events, created individually in Sanity */}}
+  {{ $now := now }}
+  {{ $upcoming := slice }}
+  {{ $past := slice }}
+  {{ range $data.events }}
+    {{ $e := . }}
+    {{ if ge (time.AsTime $e.date) $now }}
+      {{ $upcoming = $upcoming | append $e }}
+    {{ else }}
+      {{ $past = $past | append $e }}
+    {{ end }}
+  {{ end }}
 
   {{ if $upcoming }}
     <h2>Upcoming events</h2>
     <ul class="card-list" role="list" style="margin-bottom: var(--space-10);">
-      {{ range $upcoming.ByParam "date" }}
+      {{ range $upcoming }}
         <li>
           <article class="event-card">
 
             {{/* Date block — visual calendar treatment */}}
             <div class="event-card__date" aria-hidden="true">
-              <span class="event-card__day">{{ .Params.date | time.Format "2" }}</span>
-              <span class="event-card__month">{{ .Params.date | time.Format "Jan" }}</span>
+              <span class="event-card__day">{{ .date | time.Format "2" }}</span>
+              <span class="event-card__month">{{ .date | time.Format "Jan" }}</span>
             </div>
 
             <div>
-              <h3 class="event-card__title">{{ .Title }}</h3>
+              <h3 class="event-card__title">{{ .title }}</h3>
 
               <p class="event-card__time">
                 {{/* Machine-readable datetime for assistive tech */}}
-                <time datetime="{{ (.Params.date | time.Format "2006-01-02T15:04") }}">
-                  {{ .Params.date | time.Format "Monday 2 January 2006, 3:04pm" }}
+                <time datetime="{{ (.date | time.Format "2006-01-02T15:04") }}">
+                  {{ .date | time.Format "Monday 2 January 2006, 3:04pm" }}
                 </time>
-                {{ with .Params.end_date }}
+                {{ with .endDate }}
                   – <time datetime="{{ (. | time.Format "2006-01-02T15:04") }}">
                     {{ . | time.Format "3:04pm" }}
                   </time>
                 {{ end }}
               </p>
 
-              {{ with .Params.event_type }}
+              {{ with .eventType }}
                 <span class="badge badge--green" style="margin-bottom: var(--space-3);">{{ . }}</span>
               {{ end }}
 
-              <div class="prose">{{ .Content }}</div>
+              <div class="prose">{{ .body | markdownify }}</div>
 
-              {{ with .Params.contact }}
+              {{ with .contact }}
                 <p style="font-size: var(--text-sm); margin-top: var(--space-3); margin-bottom: 0;">
                   <strong>Contact / booking:</strong>
                   {{ if strings.Contains . "@" }}
@@ -102,15 +113,15 @@
         </svg>
       </summary>
       <div class="minutes-year__body">
-        {{ range $past.ByDate.Reverse }}
+        {{ range $past | collections.Reverse }}
           <div class="meeting-row">
             <span class="meeting-row__date">
-              <time datetime="{{ .Params.date | time.Format "2006-01-02" }}">
-                {{ .Params.date | time.Format "2 Jan 2006" }}
+              <time datetime="{{ .date | time.Format "2006-01-02" }}">
+                {{ .date | time.Format "2 Jan 2006" }}
               </time>
             </span>
-            <span class="meeting-row__type">{{ .Title }}</span>
-            {{ with .Params.event_type }}
+            <span class="meeting-row__type">{{ .title }}</span>
+            {{ with .eventType }}
               <span class="badge badge--grey">{{ . }}</span>
             {{ end }}
           </div>

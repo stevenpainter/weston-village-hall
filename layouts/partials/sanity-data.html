@@ -1,0 +1,20 @@
+{{/* Returnable partial: fetches all site content from Sanity in a single request. */}}
+{{ $groq := `{
+  "home": *[_id == "home"][0]{title, body, "heroImageUrl": heroImage.asset->url, "heroImageAlt": heroImage.alt},
+  "about": *[_id == "about"][0]{title, body},
+  "facilities": *[_id == "facilities"][0]{title, body},
+  "contact": *[_id == "contact"][0]{title, body},
+  "eventsIndex": *[_id == "eventsIndex"][0]{title, intro, activities},
+  "events": *[_type == "event"] | order(date asc) {_id, title, date, endDate, eventType, body, contact, "imageUrl": image.asset->url, "imageAlt": image.alt}
+}` }}
+
+{{ $url := printf "https://%s.api.sanity.io/v2024-01-01/data/query/%s?query=%s" site.Params.sanityProjectId site.Params.sanityDataset (urlquery $groq) }}
+
+{{ $opts := dict "headers" (dict "Authorization" (printf "Bearer %s" (os.Getenv "HUGO_SANITY_TOKEN"))) }}
+{{ $try := try (resources.GetRemote $url $opts) }}
+{{ with $try.Err }}
+  {{ errorf "Failed to fetch content from Sanity: %s" . }}
+{{ end }}
+
+{{ $parsed := $try.Value.Content | transform.Unmarshal }}
+{{ return $parsed.result }}

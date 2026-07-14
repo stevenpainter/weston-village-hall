@@ -15,6 +15,15 @@ params:
   facebook: "Weston Village Hall NG23 6ST"
   instagram: "weston_village_hall_ng23"
   address: "Main Street, Weston, Newark, Nottinghamshire NG23 6ST"
+  sanityProjectId: "5ghzoo6a"
+  sanityDataset: "production"
+
+# Content is fetched fresh from Sanity on every build (see partials/sanity-data.html),
+# so remote resources must not be cached across builds — otherwise a Sanity publish
+# webhook would trigger a rebuild that just re-serves stale cached content.
+caches:
+  getresource:
+    maxAge: "1s"
 
 outputs:
   home:
