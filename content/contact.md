@@ -16,7 +16,7 @@ We'd love to hear from you — get in touch to discuss your event or make a book
 
 ## Find us
 
-Weston Village Hall, Weston, Newark, Nottinghamshire, NG23 6ST
+Weston Village Hall, Main Street, Weston, Newark, Nottinghamshire, NG23 6ST
 
 ## Keep up to date
 

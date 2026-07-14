@@ -14,7 +14,7 @@ params:
   bookingPhone: "07890 806894"
   facebook: "Weston Village Hall NG23 6ST"
   instagram: "weston_village_hall_ng23"
-  address: "Weston, Newark, Nottinghamshire NG23 6ST"
+  address: "Main Street, Weston, Newark, Nottinghamshire NG23 6ST"
 
 outputs:
   home:
