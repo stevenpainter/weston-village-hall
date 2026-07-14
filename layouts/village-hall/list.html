@@ -1,0 +1,48 @@
+{{ define "main" }}
+
+  <nav aria-label="Breadcrumb" class="breadcrumb">
+    <a href="/">Home</a>
+    <span class="breadcrumb__separator" aria-hidden="true">›</span>
+    <span aria-current="page">{{ .Title }}</span>
+  </nav>
+
+  <header class="page-header">
+    <h1>{{ .Title }}</h1>
+  </header>
+
+  {{ with .Params.intro }}
+    <div class="prose" style="margin-bottom: var(--space-8);">{{ . | markdownify }}</div>
+  {{ end }}
+
+  {{ if .Params.committee }}
+    <h2>Committee</h2>
+    <ul class="councillors-grid" role="list" style="margin-bottom: var(--space-8);">
+      {{ range .Params.committee }}
+        {{ if .name }}
+          <li class="councillor-card">
+            <span class="councillor-card__name">{{ .name }}</span>
+            {{ with .role }}<span class="councillor-card__role">{{ . }}</span>{{ end }}
+          </li>
+        {{ end }}
+      {{ end }}
+    </ul>
+  {{ end }}
+
+  {{ if or .Params.charity_number .Params.contact_email }}
+    <p style="font-size: var(--text-sm); color: var(--color-text-muted);">
+      {{ with .Params.charity_number }}Registered charity number {{ . }}.{{ end }}
+      {{ with .Params.contact_email }}Contact: <a href="mailto:{{ . }}">{{ . }}</a>{{ end }}
+    </p>
+  {{ end }}
+
+  {{ if .Params.photos }}
+    <ul class="card-list card-list--two-col" role="list" style="margin-top: var(--space-8);">
+      {{ range .Params.photos }}
+        <li class="card">
+          <img class="card__img" src="{{ .photo }}" alt="{{ .alt }}">
+        </li>
+      {{ end }}
+    </ul>
+  {{ end }}
+
+{{ end }}
