@@ -12,9 +12,11 @@
 
 {{ $opts := dict "headers" (dict "Authorization" (printf "Bearer %s" (os.Getenv "HUGO_SANITY_TOKEN"))) }}
 {{ $try := try (resources.GetRemote $url $opts) }}
-{{ with $try.Err }}
-  {{ errorf "Failed to fetch content from Sanity: %s" . }}
+{{ $result := dict }}
+{{ if $try.Err }}
+  {{ errorf "Failed to fetch content from Sanity (check HUGO_SANITY_TOKEN is set correctly): %s" $try.Err }}
+{{ else }}
+  {{ $parsed := $try.Value.Content | transform.Unmarshal }}
+  {{ $result = $parsed.result }}
 {{ end }}
-
-{{ $parsed := $try.Value.Content | transform.Unmarshal }}
-{{ return $parsed.result }}
+{{ return $result }}
