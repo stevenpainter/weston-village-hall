@@ -208,10 +208,18 @@
   color: var(--color-white);
 }
 
+.social-links {
+  display: flex;
+  gap: var(--space-4);
+}
+
 .social-link {
   display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.social-link:hover {
+  color: var(--color-white);
 }
 
 .social-link__icon {
