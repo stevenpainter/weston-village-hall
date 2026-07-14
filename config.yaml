@@ -1,7 +1,6 @@
 baseURL: "https://westonparishnotts.org.uk"
 languageCode: "en-GB"
 title: "Weston Parish Council"
-theme: ""
 
 params:
   description: "The official website of Weston Parish Council, Nottinghamshire."
