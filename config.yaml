@@ -13,7 +13,9 @@ params:
   bookingEmail: "kpcep123@gmail.com"
   bookingPhone: "07890 806894"
   facebook: "Weston Village Hall NG23 6ST"
+  facebookUrl: "" # TODO: add the real Facebook page URL
   instagram: "weston_village_hall_ng23"
+  instagramUrl: "https://www.instagram.com/weston_village_hall_ng23/"
   address: "Main Street, Weston, Newark, Nottinghamshire NG23 6ST"
   sanityProjectId: "5ghzoo6a"
   sanityDataset: "production"
